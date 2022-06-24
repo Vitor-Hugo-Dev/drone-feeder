@@ -1,20 +1,27 @@
-version: '3.3'
-
+version: "3.7"
 services:
-  # Database
+  application:
+    container_name: drone_feeder_app
+    build: .
+    restart: always
+    ports:
+      - 3000:8080
+    links:
+      - mysql
+    depends_on:
+      mysql:
+        condition: service_healthy
   mysql:
-    image: mysql
-    volumes:
-      # Define um volume interno do Docker para persistir os dados
-      - my-db:/var/lib/mysql
-      - ./init-mysql.sql:/data/application/init.sql
-    command: --init-file /data/application/init.sql
+    image: mysql:latest
+    container_name: db
     restart: always
     ports:
       - 3306:3306
     environment:
-      MYSQL_ROOT_PASSWORD: root
-
-volumes:
-  # Cria o volume interno do Docker
-  my-db:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "drone_feeder"
+      MYSQL_USER: "root"
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 5
