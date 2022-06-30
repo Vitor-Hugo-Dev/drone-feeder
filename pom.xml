@@ -11,7 +11,7 @@
 	<groupId>com.futureh</groupId>
 	<artifactId>dronefeeder</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>dronefeeder</name>
 	<description>Projeto final aceleração de Java - Trybe e CI&amp;T - Grupo 3</description>
 	<properties>
