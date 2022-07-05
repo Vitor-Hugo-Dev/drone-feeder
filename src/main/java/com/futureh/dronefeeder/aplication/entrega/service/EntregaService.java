@@ -1,11 +1,11 @@
 package com.futureh.dronefeeder.aplication.entrega.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.futureh.dronefeeder.domain.entrega.exception.EntregaInvalidaException;
 import com.futureh.dronefeeder.domain.entrega.model.Entrega;
 import com.futureh.dronefeeder.infrastructure.persistence.hibernate.repository.entrega.EntregaRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class EntregaService {
@@ -13,6 +13,9 @@ public class EntregaService {
   @Autowired
   EntregaRepository entregaRepository;
 
+  /**
+   * metodo para salvar uma entrega.
+   */
   public Entrega salvarEntrega(Entrega entrega)
       throws EntregaInvalidaException {
     verificaDadosDeEntrega(entrega);
@@ -21,6 +24,9 @@ public class EntregaService {
     return newEntrega;
   }
 
+  /**
+   * metodo para validar os campos.
+   */
   private void verificaDadosDeEntrega(Entrega entrega)
       throws EntregaInvalidaException {
     if (entrega.getDrone() == null) {
