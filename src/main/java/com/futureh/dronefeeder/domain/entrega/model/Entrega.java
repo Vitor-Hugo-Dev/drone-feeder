@@ -1,5 +1,7 @@
 package com.futureh.dronefeeder.domain.entrega.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.futureh.dronefeeder.domain.drone.model.Drone;
 
 import java.time.LocalDate;
@@ -15,6 +17,10 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "tb_entregas")
+// https://pt.stackoverflow.com/questions/242288
+@JsonIdentityInfo(
+    generator = ObjectIdGenerators.PropertyGenerator.class, 
+    property = "id")
 public class Entrega {
 
   @Id
