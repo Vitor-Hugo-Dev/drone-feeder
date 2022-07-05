@@ -46,8 +46,8 @@ public class Drone {
       List<Entrega> entregas) {
 
     this.id = id;
-    this.statusDrone = statusDrone;
-    this.localizacaoDrone = localizacaoDrone;
+    this.statusDrone = "Ativo";
+    this.localizacaoDrone = "Base";
     this.modelo = modelo;
     this.entregas = entregas;
   }
@@ -60,8 +60,9 @@ public class Drone {
       String localizacaoDrone,
       String modelo,
       List<Entrega> entregas) {
-    this.statusDrone = statusDrone;
-    this.localizacaoDrone = localizacaoDrone;
+    
+    this.statusDrone = "Ativo";
+    this.localizacaoDrone = "Base";
     this.modelo = modelo;
     this.entregas = entregas;
   }
