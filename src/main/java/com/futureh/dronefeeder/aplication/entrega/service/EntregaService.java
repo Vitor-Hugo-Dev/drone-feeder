@@ -27,16 +27,21 @@ public class EntregaService {
    */
   public Entrega salvarEntrega(Entrega entrega)
       throws EntregaInvalidaException {
+
+    verificaDadosDeEntrega(entrega);
     // convertendo Iterable para lista
     List<Drone> drones = StreamSupport
         .stream(droneService.retornaTodosDrones().spliterator(), false)
         .collect(Collectors.toList());
 
     Entrega editEntrega = entrega;
-    drones.get(0).addEntrega(editEntrega);
-    editEntrega.setDrone(drones.get(0));
+    List<Drone> dronesAtivos = drones.stream()
+        .filter(drone -> drone.getStatusDrone().equals("Ativo"))
+        .collect(Collectors.toList());
 
-    verificaDadosDeEntrega(entrega);
+    dronesAtivos.get(0).addEntrega(editEntrega);
+    editEntrega.setDrone(dronesAtivos.get(0));
+    dronesAtivos.get(0).setStatusDrone("Ocupado");
 
     Entrega newEntrega = entregaRepository.save(editEntrega);
 
@@ -48,10 +53,8 @@ public class EntregaService {
    */
   private void verificaDadosDeEntrega(Entrega entrega)
       throws EntregaInvalidaException {
-    if (entrega.getDrone() == null) {
-      throw new EntregaInvalidaException(
-          "drone não pode ser Null");
-    } else if (entrega.getStatusPedido() == null) {
+
+    if (entrega.getStatusPedido() == null) {
       throw new EntregaInvalidaException(
           "statusPedido não pode ser Null");
     } else if (entrega.getNomeCliente() == null) {
