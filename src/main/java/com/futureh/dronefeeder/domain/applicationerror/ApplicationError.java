@@ -1,4 +1,4 @@
-package com.futureh.dronefeeder.domain.applicationError;
+package com.futureh.dronefeeder.domain.applicationerror;
 
 import org.springframework.http.HttpStatus;
 
