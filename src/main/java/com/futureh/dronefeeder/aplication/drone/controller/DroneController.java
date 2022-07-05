@@ -5,6 +5,7 @@ import com.futureh.dronefeeder.domain.drone.model.Drone;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,7 +21,10 @@ public class DroneController {
   /**
    * Salva novo Drone (POST).
    */
-  @RequestMapping(value = "/drone", method = RequestMethod.POST)
+  @RequestMapping(value = "/drone", method = RequestMethod.POST,
+      consumes = MediaType.APPLICATION_JSON_VALUE,
+      produces = MediaType.APPLICATION_JSON_VALUE
+      )
   public ResponseEntity<Drone> salvaDrone(@RequestBody Drone novoDrone) {
     return ResponseEntity
         .status(HttpStatus.OK)
@@ -75,7 +79,7 @@ public class DroneController {
   /**
    * Deleta drone (DELETE).
    */
-  @RequestMapping(value = "/series/{droneId}", method = RequestMethod.DELETE)
+  @RequestMapping(value = "/drone/{droneId}", method = RequestMethod.DELETE)
   public ResponseEntity<String> deletaDrone(@PathVariable Integer droneId) {
     return ResponseEntity.status(HttpStatus.OK).body(droneService.deletaDrone(droneId));
   }

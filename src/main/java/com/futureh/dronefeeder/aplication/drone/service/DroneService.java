@@ -7,8 +7,11 @@ import com.futureh.dronefeeder.infrastructure.persistence.hibernate.repository.d
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class DroneService {
+
   @Autowired
   DroneRepository droneRepository;
 
@@ -17,8 +20,8 @@ public class DroneService {
    */
   public Drone salvaDrone(Drone novoDrone) throws DroneInvalidoException {
     if (novoDrone.getModelo().isEmpty()
-        || novoDrone.getLocalizacaoDrone() != "Base"
-        || novoDrone.getStatusDrone() != "Ativo") {
+        || !novoDrone.getLocalizacaoDrone().equals("Base")
+        || !novoDrone.getStatusDrone().equals("Ativo")) {
 
       throw new DroneInvalidoException();
     }

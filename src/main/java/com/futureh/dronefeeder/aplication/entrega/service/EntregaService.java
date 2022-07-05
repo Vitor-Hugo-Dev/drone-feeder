@@ -1,8 +1,14 @@
 package com.futureh.dronefeeder.aplication.entrega.service;
 
+import com.futureh.dronefeeder.aplication.drone.service.DroneService;
+import com.futureh.dronefeeder.domain.drone.model.Drone;
 import com.futureh.dronefeeder.domain.entrega.exception.EntregaInvalidaException;
 import com.futureh.dronefeeder.domain.entrega.model.Entrega;
 import com.futureh.dronefeeder.infrastructure.persistence.hibernate.repository.entrega.EntregaRepository;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,13 +19,26 @@ public class EntregaService {
   @Autowired
   EntregaRepository entregaRepository;
 
+  @Autowired
+  DroneService droneService;
+
   /**
    * metodo para salvar uma entrega.
    */
   public Entrega salvarEntrega(Entrega entrega)
       throws EntregaInvalidaException {
+    // convertendo Iterable para lista
+    List<Drone> drones = StreamSupport
+        .stream(droneService.retornaTodosDrones().spliterator(), false)
+        .collect(Collectors.toList());
+
+    Entrega editEntrega = entrega;
+    drones.get(0).addEntrega(editEntrega);
+    editEntrega.setDrone(drones.get(0));
+
     verificaDadosDeEntrega(entrega);
-    Entrega newEntrega = entregaRepository.save(entrega);
+
+    Entrega newEntrega = entregaRepository.save(editEntrega);
 
     return newEntrega;
   }
