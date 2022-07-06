@@ -18,9 +18,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "tb_entregas")
 // https://pt.stackoverflow.com/questions/242288
-@JsonIdentityInfo(
-    generator = ObjectIdGenerators.PropertyGenerator.class, 
-    property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Entrega {
 
   @Id
