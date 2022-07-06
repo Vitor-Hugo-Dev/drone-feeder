@@ -69,7 +69,7 @@ public class DroneService {
   public Drone atualizaLocalizacaoDrone(Integer id, String novaLocalizacao) {
     Drone droneParaAtualizar = retornaDronePeloId(id);
 
-    droneParaAtualizar.setStatusDrone(novaLocalizacao);
+    droneParaAtualizar.setLocalizacaoDrone(novaLocalizacao);
 
     return droneParaAtualizar;
   }

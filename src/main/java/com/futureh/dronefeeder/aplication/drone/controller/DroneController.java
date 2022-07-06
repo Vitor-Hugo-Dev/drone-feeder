@@ -65,7 +65,7 @@ public class DroneController {
   }
 
   /**
-   * Atualiza Status Drone (POST).
+   * Atualiza Localização Drone (POST).
    */
   @RequestMapping(value = "/drone/{droneId}/localizacao/{localizacaoDrone}",
       method = RequestMethod.POST)

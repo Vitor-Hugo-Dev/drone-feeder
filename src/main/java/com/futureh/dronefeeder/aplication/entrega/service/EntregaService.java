@@ -1,11 +1,5 @@
 package com.futureh.dronefeeder.aplication.entrega.service;
 
-import com.futureh.dronefeeder.aplication.drone.service.DroneService;
-import com.futureh.dronefeeder.domain.drone.model.Drone;
-import com.futureh.dronefeeder.domain.entrega.exception.EntregaInvalidaException;
-import com.futureh.dronefeeder.domain.entrega.model.Entrega;
-import com.futureh.dronefeeder.infrastructure.persistence.hibernate.repository.entrega.EntregaRepository;
-
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -13,12 +7,21 @@ import java.util.stream.StreamSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.futureh.dronefeeder.aplication.drone.service.DroneService;
+import com.futureh.dronefeeder.domain.drone.model.Drone;
+import com.futureh.dronefeeder.domain.entrega.exception.EntregaInvalidaException;
+import com.futureh.dronefeeder.domain.entrega.model.Entrega;
+import com.futureh.dronefeeder.infrastructure.persistence.hibernate.repository.drone.DroneRepository;
+import com.futureh.dronefeeder.infrastructure.persistence.hibernate.repository.entrega.EntregaRepository;
+
 @Service
 public class EntregaService {
-
   @Autowired
   EntregaRepository entregaRepository;
 
+  @Autowired
+  DroneRepository droneRepository;
+  
   @Autowired
   DroneService droneService;
 
@@ -38,10 +41,13 @@ public class EntregaService {
     List<Drone> dronesAtivos = drones.stream()
         .filter(drone -> drone.getStatusDrone().equals("Ativo"))
         .collect(Collectors.toList());
-
-    dronesAtivos.get(0).addEntrega(editEntrega);
-    editEntrega.setDrone(dronesAtivos.get(0));
-    dronesAtivos.get(0).setStatusDrone("Ocupado");
+    
+    Drone primeiroDroneLivre = dronesAtivos.get(0);
+    
+    primeiroDroneLivre.addEntrega(editEntrega);
+    editEntrega.setDrone(primeiroDroneLivre);
+    primeiroDroneLivre.setStatusDrone("Ocupado");
+    droneRepository.save(primeiroDroneLivre);
 
     Entrega newEntrega = entregaRepository.save(editEntrega);
 
