@@ -43,11 +43,9 @@ public class Drone {
   }
 
   /**
-   * construtor com todos os atributos.
+   * construtor com todos os atributos necessários.
    */
   public Drone(Integer id,
-      String statusDrone,
-      String localizacaoDrone,
       String modelo,
       List<Entrega> entregas) {
 
@@ -59,11 +57,9 @@ public class Drone {
   }
 
   /**
-   * construtor com todos os atributos, menos o ID.
+   * construtor com todos os atributos necessários, menos o ID.
    */
   public Drone(
-      String statusDrone,
-      String localizacaoDrone,
       String modelo,
       List<Entrega> entregas) {
     
