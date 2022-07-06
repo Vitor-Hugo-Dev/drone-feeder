@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -18,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.futureh.dronefeeder.aplication.drone.service.DroneService;
+import com.futureh.dronefeeder.domain.drone.exception.DroneAtivoInexistenteException;
 import com.futureh.dronefeeder.domain.drone.model.Drone;
 import com.futureh.dronefeeder.domain.entrega.exception.EntregaInvalidaException;
 import com.futureh.dronefeeder.domain.entrega.model.Entrega;
@@ -47,10 +47,7 @@ public class EntregaServiceTests {
   private static LocalTime horarioRecebimentoPedido = LocalTime.parse("10:00:00");
   private static LocalTime horarioEntregaPedido = LocalTime.parse("12:00:00");
 
-  private Drone mockDrone = new Drone("Ativo",
-      "Base",
-      "Phanton3",
-      new ArrayList<>());
+  private Drone mockDrone = new Drone("Phanton3", new ArrayList<>());
 
   private Entrega mockEntrega = new Entrega();
 
@@ -81,7 +78,9 @@ public class EntregaServiceTests {
 
   @Test
   @DisplayName("Testa se uma entrega é criada com sucesso!")
-  public void testSalvarEntrega() throws EntregaInvalidaException {
+  public void testSalvarEntrega()
+      throws EntregaInvalidaException,
+      DroneAtivoInexistenteException {
     Entrega newEntrega = entregaService.salvarEntrega(mockEntrega);
     Assertions.assertNotNull(newEntrega);
   }

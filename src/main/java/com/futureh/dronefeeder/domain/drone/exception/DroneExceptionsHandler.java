@@ -18,10 +18,20 @@ public class DroneExceptionsHandler {
   }
 
   /**
-   * Retorna erro.
+   * Retorna erro drone inexistente.
    */
   @ExceptionHandler(DroneInexistenteException.class)
   public ResponseEntity<ApplicationError> droneInexistente(DroneInexistenteException error) {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND)
+        .body(new ApplicationError(error.getMessage(), HttpStatus.NOT_FOUND));
+  }
+
+  /**
+   * Retorna erro drone ativo inexistente.
+   */
+  @ExceptionHandler(DroneAtivoInexistenteException.class)
+  public ResponseEntity<ApplicationError> droneAtivoInexistenteException(
+      DroneAtivoInexistenteException error) {
     return ResponseEntity.status(HttpStatus.NOT_FOUND)
         .body(new ApplicationError(error.getMessage(), HttpStatus.NOT_FOUND));
   }

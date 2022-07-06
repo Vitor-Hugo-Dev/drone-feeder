@@ -1,6 +1,7 @@
 package com.futureh.dronefeeder.aplication.entrega.service;
 
 import com.futureh.dronefeeder.aplication.drone.service.DroneService;
+import com.futureh.dronefeeder.domain.drone.exception.DroneAtivoInexistenteException;
 import com.futureh.dronefeeder.domain.drone.model.Drone;
 import com.futureh.dronefeeder.domain.entrega.exception.EntregaInvalidaException;
 import com.futureh.dronefeeder.domain.entrega.exception.EntregaNaoEncontradaException;
@@ -32,9 +33,11 @@ public class EntregaService {
 
   /**
    * metodo para salvar uma entrega.
+   *
    */
   public Entrega salvarEntrega(Entrega entrega)
-      throws EntregaInvalidaException {
+      throws EntregaInvalidaException,
+      DroneAtivoInexistenteException {
 
     verificaDadosDeEntrega(entrega);
     // convertendo Iterable para lista
@@ -47,6 +50,10 @@ public class EntregaService {
     List<Drone> dronesAtivos = drones.stream()
         .filter(drone -> drone.getStatusDrone().equals("Ativo"))
         .collect(Collectors.toList());
+
+    if (dronesAtivos.isEmpty()) {
+      throw new DroneAtivoInexistenteException();
+    }
 
     Drone primeiroDroneLivre = dronesAtivos.get(0);
 
@@ -88,6 +95,9 @@ public class EntregaService {
     return entregas;
   }
 
+  /**
+   * Javadoc.
+   */
   public Entrega atualizaEntrega(Integer id, String dataEntrega, String horarioEntrega)
       throws EntregaNaoEncontradaException {
     Entrega entrega = buscarEntregaPorId(id);

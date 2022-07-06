@@ -1,5 +1,7 @@
 package com.futureh.dronefeeder.aplication.drone;
 
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.futureh.dronefeeder.domain.drone.model.Drone;
 import com.futureh.dronefeeder.infrastructure.persistence.hibernate.repository.drone.DroneRepository;
 
@@ -25,6 +28,9 @@ public class DroneServiceTest {
   
   @SpyBean
   private DroneRepository droneRepository;
+
+  @Autowired
+  private ObjectMapper objectMapper;
   
   @BeforeEach
   public void initEach() {
@@ -33,14 +39,12 @@ public class DroneServiceTest {
   
   @Test
   public void salvarDroneTest() throws Exception {
-    final var droneTeste = new Drone("Phantom4", null);
+    final var droneTeste = new Drone("Phantom4", new ArrayList<>());
 
-    mockMvc.perform(MockMvcRequestBuilders
-        .post("/drone")
-        .content(asJsonString(droneTeste)
-        .accept(MediaType.APPLICATION_JSON))
-        .andExpect(status().isCreated())
-        .andExpect(MockMvcResultMatchers.jsonPath("$.employeeId").exists());
+    mockMvc.perform(MockMvcRequestBuilders.post("/drone")
+        .contentType("application/json")
+        .content(objectMapper.writeValueAsString(droneTeste)))
+        .andExpect(MockMvcResultMatchers.status().isOk());
   }
   
 }

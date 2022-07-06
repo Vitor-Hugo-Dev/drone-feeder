@@ -3,13 +3,11 @@ package com.futureh.dronefeeder.aplication.entrega.controller;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,8 +16,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.futureh.dronefeeder.aplication.drone.service.DroneService;
-import com.futureh.dronefeeder.aplication.entrega.service.EntregaService;
+
 import com.futureh.dronefeeder.domain.drone.model.Drone;
 import com.futureh.dronefeeder.domain.entrega.exception.EntregaInvalidaException;
 import com.futureh.dronefeeder.domain.entrega.model.Entrega;
@@ -34,15 +31,7 @@ public class EntregaControllerTest {
   @Autowired
   private ObjectMapper objectMapper;
 
-  @Autowired
-  private DroneService droneService;
-
-  @Autowired
-  private EntregaService entregaService;
-
-  private static Drone drone = new Drone("Ativo",
-      "Base",
-      "Phanton3",
+  private static Drone drone = new Drone("Phanton3",
       new ArrayList<>());
   private static String statusPedido = "chegou a transportadora";
   private static String nomeCliente = "rogerinho DragonBorn";
