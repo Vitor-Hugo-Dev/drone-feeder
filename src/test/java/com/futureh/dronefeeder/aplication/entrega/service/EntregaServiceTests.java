@@ -1,9 +1,10 @@
 package com.futureh.dronefeeder.aplication.entrega.service;
 
-import static org.mockito.ArgumentMatchers.notNull;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -16,10 +17,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import com.futureh.dronefeeder.aplication.drone.service.DroneService;
 import com.futureh.dronefeeder.domain.drone.model.Drone;
 import com.futureh.dronefeeder.domain.entrega.exception.EntregaInvalidaException;
 import com.futureh.dronefeeder.domain.entrega.model.Entrega;
-import com.futureh.dronefeeder.infrastructure.persistence.hibernate.repository.drone.DroneRepository;
 import com.futureh.dronefeeder.infrastructure.persistence.hibernate.repository.entrega.EntregaRepository;
 
 @SpringBootTest
@@ -31,7 +32,7 @@ public class EntregaServiceTests {
   EntregaRepository entregaRepository;
 
   @MockBean
-  DroneRepository droneRepository;
+  DroneService droneService;
 
   @Autowired
   private EntregaService entregaService;
@@ -46,10 +47,16 @@ public class EntregaServiceTests {
   private static LocalTime horarioRecebimentoPedido = LocalTime.parse("10:00:00");
   private static LocalTime horarioEntregaPedido = LocalTime.parse("12:00:00");
 
+  private Drone mockDrone = new Drone("Ativo",
+      "Base",
+      "Phanton3",
+      new ArrayList<>());
+
   private Entrega mockEntrega = new Entrega();
 
   @BeforeEach
-  public void initEach() { // Mock do repository para testar o Service
+  public void initEach() {
+    // setando valores da entrega
     mockEntrega.setDrone(drone);
     mockEntrega.setStatusPedido(statusPedido);
     mockEntrega.setNomeCliente(nomeCliente);
@@ -60,6 +67,10 @@ public class EntregaServiceTests {
     mockEntrega.setHorarioRecebimentoPedido(horarioRecebimentoPedido);
     mockEntrega.setHorarioEntregaPedido(horarioEntregaPedido);
 
+    // montando mock do drone
+    Iterable<Drone> mockDroneIterable = Arrays.asList(mockDrone);
+
+    Mockito.when(droneService.retornaTodosDrones()).thenReturn(mockDroneIterable);
     Mockito.when(entregaRepository.save(mockEntrega)).thenReturn(mockEntrega);
   }
 
@@ -79,8 +90,7 @@ public class EntregaServiceTests {
   @DisplayName("Testa se é lançado um erro específico ao tentar criar uma entrega com dados incompletos")
   public void testErroSalvarEntrega() throws EntregaInvalidaException {
     mockEntrega.setNomeCliente(null);
-    // Entrega newEntrega = entregaService.salvarEntrega(mockEntrega);
-    
+
     Assertions.assertThrows(EntregaInvalidaException.class, () -> entregaService.salvarEntrega(mockEntrega));
   }
 }
