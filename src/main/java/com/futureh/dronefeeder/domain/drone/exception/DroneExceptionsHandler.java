@@ -1,10 +1,12 @@
 package com.futureh.dronefeeder.domain.drone.exception;
 
 import com.futureh.dronefeeder.domain.applicationerror.ApplicationError;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
 
 @RestControllerAdvice
 public class DroneExceptionsHandler {
@@ -34,5 +36,15 @@ public class DroneExceptionsHandler {
       DroneAtivoInexistenteException error) {
     return ResponseEntity.status(HttpStatus.NOT_FOUND)
         .body(new ApplicationError(error.getMessage(), HttpStatus.NOT_FOUND));
+  }
+  
+  /**
+   * Retorna erro drone status inválido.
+   */
+  @ExceptionHandler(DroneStatusException.class)
+  public ResponseEntity<ApplicationError> droneStatusException(
+      DroneStatusException error) {
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        .body(new ApplicationError(error.getMessage(), HttpStatus.BAD_REQUEST));
   }
 }
