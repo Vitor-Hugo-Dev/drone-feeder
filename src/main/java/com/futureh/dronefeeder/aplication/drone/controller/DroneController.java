@@ -27,7 +27,7 @@ public class DroneController {
       )
   public ResponseEntity<Drone> salvaDrone(@RequestBody Drone novoDrone) {
     return ResponseEntity
-        .status(HttpStatus.OK)
+        .status(HttpStatus.CREATED)
         .body(droneService.salvaDrone(novoDrone));
   }
 

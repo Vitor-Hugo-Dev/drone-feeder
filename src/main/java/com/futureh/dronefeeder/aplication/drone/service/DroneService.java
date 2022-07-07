@@ -2,12 +2,15 @@ package com.futureh.dronefeeder.aplication.drone.service;
 
 import com.futureh.dronefeeder.domain.drone.exception.DroneInexistenteException;
 import com.futureh.dronefeeder.domain.drone.exception.DroneInvalidoException;
+import com.futureh.dronefeeder.domain.drone.exception.DroneStatusException;
 import com.futureh.dronefeeder.domain.drone.model.Drone;
 import com.futureh.dronefeeder.infrastructure.persistence.hibernate.repository.drone.DroneRepository;
+
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class DroneService {
@@ -34,7 +37,7 @@ public class DroneService {
   /**
    * Retorna Drone existente pelo ID.
    */
-  public Drone retornaDronePeloId(Integer id) {
+  public Drone retornaDronePeloId(Integer id) throws DroneInexistenteException {
     Optional<Drone> droneById = droneRepository.findById(id);
 
     if (!droneById.isEmpty()) {
@@ -55,12 +58,17 @@ public class DroneService {
   /**
    * Atualiza status Drone existente.
    */
-  public Drone atualizaStatusDrone(Integer id, String novoStatus) {
+  public Drone atualizaStatusDrone(Integer id, String novoStatus) throws DroneStatusException {
     Drone droneParaAtualizar = retornaDronePeloId(id);
+    
+    if (novoStatus.equals("ocupado") || novoStatus.equals("ativo")) {
+      droneParaAtualizar.setStatusDrone(novoStatus);
 
-    droneParaAtualizar.setStatusDrone(novoStatus);
-
-    return droneParaAtualizar;
+      return droneParaAtualizar;
+    } else {
+      throw new DroneStatusException();
+    }
+    
   }
 
   /**
